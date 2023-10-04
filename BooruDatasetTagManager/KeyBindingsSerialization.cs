@@ -93,7 +93,14 @@ namespace BooruDatasetTagManager
                 entry => entry.Key,
                 entry => StringDecode(entry.Value)
             );
-            var keyBindings = new KeyBindings { CommandKeyMap = commandKeyMap };
+            var keyBindings = new KeyBindings();
+
+            // Use the update method instead of blindly mem-copying the saved key-bindings, to ensure only commands
+            // that *actually exist* in *this version* of the app get loaded. Otherwise new, dropped or changed
+            // commands will not get reflected, and a crash is likely to ensue as a result.
+            foreach (var kv in commandKeyMap.ToArray()) {
+                keyBindings.Update(kv.Key, kv.Value);
+            }
             return keyBindings;
         }
 
