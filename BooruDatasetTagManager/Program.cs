@@ -67,6 +67,7 @@ namespace BooruDatasetTagManager
                         TagsList.SaveTags(tagFile);
                     }
                     TagsList.LoadTranslation(TransManager);
+                    KeyBinder = new KeyBinder(Settings.KeyBindings);
                 });
                 f_wait.Close();
             };
@@ -83,5 +84,7 @@ namespace BooruDatasetTagManager
         public static AppSettings Settings;
 
         public static TagsDB TagsList;
+
+        public static KeyBinder KeyBinder;
     }
 }

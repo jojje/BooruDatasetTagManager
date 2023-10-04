@@ -34,6 +34,8 @@ namespace BooruDatasetTagManager
 
         public string Language { get; set; } = "en-US";
 
+        public KeyBindings KeyBindings { get; set; } = new KeyBindings();
+
         public AppSettings(string appDir)
         {
             InitAvaibleLangs();
@@ -72,6 +74,7 @@ namespace BooruDatasetTagManager
                 AutocompleteFont = tempSettings.AutocompleteFont;
                 AutoSort = tempSettings.AutoSort || false;
                 Language = tempSettings.Language;
+                KeyBindings = tempSettings.KeyBindings;
             }
         }
 

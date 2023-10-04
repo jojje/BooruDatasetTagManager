@@ -49,6 +49,8 @@ namespace BooruDatasetTagManager
             LanguageComboBox.Text = Program.Settings.Language;
             //--
             SwitchLanguage();
+
+            renderShortcutsView();
         }
 
         private void BtnSave_Click(object sender, EventArgs e)
@@ -162,6 +164,53 @@ namespace BooruDatasetTagManager
                     comboAutocompMode.SelectedItem = Enum.GetName(typeof(AutocompleteMode_ZH_CN), Enum.ToObject(typeof(AutocompleteMode_ZH_CN), Program.Settings.AutocompleteMode));
                     comboAutocompSort.SelectedItem = Enum.GetName(typeof(AutocompleteSort_ZH_CN), Enum.ToObject(typeof(AutocompleteSort_ZH_CN), Program.Settings.AutocompleteSort));
                     break;
+            }
+        }
+
+        private void renderShortcutsView()
+        {
+            // Initialize TableLayoutPanel
+            var tableLayoutPanel = new TableLayoutPanel();
+            tableLayoutPanel.Dock = DockStyle.Fill;
+            tableLayoutPanel.Padding = new Padding(0, 20, 0, 0);  // add some vertical top padding to create some "air"
+            tableLayoutPanel.ColumnStyles.Clear();
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25f));
+
+            // Add TableLayoutPanel to Form
+            tabPageShortcuts.Controls.Add(tableLayoutPanel);
+
+            var it = Program.Settings.KeyBindings.CommandKeyMap.GetEnumerator();
+            int row = 0;
+            while (it.MoveNext()) {
+                var keyCode = it.Current.Value;
+                var commandName = it.Current.Key;
+                var commandDesc = Program.KeyBinder.FindCommandByName(commandName).Description;
+
+                var commandNameLabel = new Label { Text = commandName };
+                var toolTip = new System.Windows.Forms.ToolTip();
+                toolTip.SetToolTip(commandNameLabel, commandDesc);
+
+                var keyCodeBox = new System.Windows.Forms.TextBox { Text = KeyCodeConverter.StringEncode(keyCode), Width = 200 };
+                keyCodeBox.KeyDown += (sender, e) =>
+                {
+                    Keys newKeyCode = e.KeyCode;
+                    if (!(e.KeyCode == Keys.ControlKey || e.KeyCode == Keys.ControlKey || e.KeyCode == Keys.ControlKey)) {
+                        if (e.Control) newKeyCode |= Keys.Control;
+                        if (e.Alt) newKeyCode |= Keys.Alt;
+                        if (e.Shift) newKeyCode |= Keys.Shift;
+
+                        Program.Settings.KeyBindings.Update(commandName, newKeyCode);
+                        keyCodeBox.Text = KeyCodeConverter.StringEncode(newKeyCode);
+                    }
+
+                    // prevent the key-event from bubbling up
+                    e.Handled = true;
+                    e.SuppressKeyPress = true;
+                };
+
+                tableLayoutPanel.Controls.Add(commandNameLabel, 0, row);
+                tableLayoutPanel.Controls.Add(keyCodeBox, 1, row);
+                row++;
             }
         }
     }

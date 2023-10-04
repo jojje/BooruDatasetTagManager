@@ -67,6 +67,7 @@ namespace BooruDatasetTagManager
             checkBox1 = new System.Windows.Forms.CheckBox();
             label3 = new System.Windows.Forms.Label();
             comboBox2 = new System.Windows.Forms.ComboBox();
+            tabPageShortcuts = new System.Windows.Forms.TabPage();
             ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
             SettingFrame.SuspendLayout();
             tabPage1.SuspendLayout();
@@ -148,6 +149,7 @@ namespace BooruDatasetTagManager
             SettingFrame.Controls.Add(tabPage1);
             SettingFrame.Controls.Add(tabPage3);
             SettingFrame.Controls.Add(tabPage2);
+            SettingFrame.Controls.Add(tabPageShortcuts);
             SettingFrame.Location = new System.Drawing.Point(1, 2);
             SettingFrame.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             SettingFrame.Name = "SettingFrame";
@@ -483,6 +485,15 @@ namespace BooruDatasetTagManager
             comboBox2.Size = new System.Drawing.Size(263, 23);
             comboBox2.TabIndex = 1;
             // 
+            // tabPageShortcuts
+            // 
+            tabPageShortcuts.Location = new System.Drawing.Point(4, 24);
+            tabPageShortcuts.Name = "tabPageShortcuts";
+            tabPageShortcuts.Size = new System.Drawing.Size(457, 318);
+            tabPageShortcuts.TabIndex = 3;
+            tabPageShortcuts.Text = "Shortcuts";
+            tabPageShortcuts.UseVisualStyleBackColor = true;
+            // 
             // Form_settings
             // 
             AcceptButton = BtnSave;
@@ -551,5 +562,6 @@ namespace BooruDatasetTagManager
         private System.Windows.Forms.CheckBox AutoSortCheckBox;
         private System.Windows.Forms.Label LabelLanguage;
         private System.Windows.Forms.ComboBox LanguageComboBox;
+        private System.Windows.Forms.TabPage tabPageShortcuts;
     }
 }

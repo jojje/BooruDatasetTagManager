@@ -879,7 +879,7 @@ namespace BooruDatasetTagManager
         }
 
         #endregion
-        private System.Windows.Forms.DataGridView gridViewTags;
+        internal System.Windows.Forms.DataGridView gridViewTags;
         private System.Windows.Forms.ToolStrip toolStrip2;
         private System.Windows.Forms.ToolStripButton BtnTagAdd;
         private System.Windows.Forms.ToolStripButton BtnTagDelete;
