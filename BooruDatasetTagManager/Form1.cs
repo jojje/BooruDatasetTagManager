@@ -33,6 +33,7 @@ namespace BooruDatasetTagManager
             previewPicBox.Name = "previewPicBox";
             allTagsFilter = new Form_filter();
             switchLanguage();
+            Program.KeyBinder.BindKeyEvents(this);  // allows shortcuts to be triggered on this form
         }
 
         private void DataGridView1_RowsRemoved(object sender, DataGridViewRowsRemovedEventArgs e)
@@ -372,7 +373,7 @@ namespace BooruDatasetTagManager
             AddNewRow();
         }
 
-        private void AddNewRow()
+        internal void AddNewRow()
         {
             if (gridViewDS.SelectedRows.Count > 1)
             {
@@ -390,16 +391,27 @@ namespace BooruDatasetTagManager
             }
             else
             {
+                int newRowOffset = 0;
                 if (gridViewTags.SelectedCells.Count == 0 || gridViewTags.RowCount == 0)
                     gridViewTags.Rows.Add();
                 else
                 {
                     gridViewTags.Rows.Insert(gridViewTags.SelectedCells[0].RowIndex + 1);
+                    newRowOffset++;
                 }
+                // enter edit mode automatically when adding a new tag
+                var newRow = gridViewTags.Rows[gridViewTags.SelectedCells[0].RowIndex + newRowOffset];
+                gridViewTags.CurrentCell = newRow.Cells[0];
+                gridViewTags.BeginEdit(true);
             }
         }
 
         private void BtnTagDelete_Click(object sender, EventArgs e)
+        {
+            DeleteTag();
+        }
+
+        internal void DeleteTag()
         {
             if (gridViewTags.SelectedCells.Count == 0)
                 return;
@@ -453,7 +465,7 @@ namespace BooruDatasetTagManager
             ApplyTagsChanges();
         }
 
-        private void ApplyTagsChanges()
+        internal void ApplyTagsChanges()
         {
             if (Program.DataManager == null)
             {
