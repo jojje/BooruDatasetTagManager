@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Linq;
-using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
-using static BooruDatasetTagManager.KeyCodeConverter;
 
 namespace BooruDatasetTagManager
 {
@@ -49,6 +47,7 @@ namespace BooruDatasetTagManager
             { Commands.ApplyTags, Keys.Control | Keys.Enter },
             { Commands.DeleteTag, Keys.Control | Keys.X},
             { Commands.EditSelectedTag, Keys.Control | Keys.E},
+            { Commands.FocusImageList, Keys.Escape},
         };
 
         /// <summary> Assign a new key-binding to an existing command </summary>
@@ -88,10 +87,11 @@ namespace BooruDatasetTagManager
 
             if (form is MainForm mainForm)
             {
-                Program.KeyBinder.RegisterCommand(new Commands.AddTagCommand(mainForm));
-                Program.KeyBinder.RegisterCommand(new Commands.ApplyTagsCommand(mainForm));
-                Program.KeyBinder.RegisterCommand(new Commands.DeleteTagCommand(mainForm));
-                Program.KeyBinder.RegisterCommand(new Commands.EditSelectedTagCommand(mainForm));
+                Program.KeyBinder.RegisterCommand(new AddTagCommand(mainForm));
+                Program.KeyBinder.RegisterCommand(new ApplyTagsCommand(mainForm));
+                Program.KeyBinder.RegisterCommand(new DeleteTagCommand(mainForm));
+                Program.KeyBinder.RegisterCommand(new EditSelectedTagCommand(mainForm));
+                Program.KeyBinder.RegisterCommand(new FocusImageListCommand(mainForm));
             }
         }
 
@@ -131,75 +131,92 @@ namespace BooruDatasetTagManager
         public const string ApplyTags = "ApplyTags";
         public const string DeleteTag = "DeleteTag";
         public const string EditSelectedTag = "EditSelectedTag";
+        public const string FocusImageList = "FocusImageList";
+    }
 
-        public class AddTagCommand : ICommand
+    public class AddTagCommand : ICommand
+    {
+        public string Name => Commands.AddTag;
+        public string Description => "Add a new tag to the image";
+        private readonly MainForm form;
+
+        public AddTagCommand(MainForm form)
         {
-            public string Name => Commands.AddTag;
-            public string Description => "Add a new tag to the image";
-            private readonly MainForm form;
-
-            public AddTagCommand(MainForm form)
-            {
-                this.form = form; // needs a reference to the form which implements the action to execute
-            }
-
-            public void Execute()
-            {
-                form.AddNewRow();
-            }
+            this.form = form; // needs a reference to the form which implements the action to execute
         }
 
-        public class ApplyTagsCommand : ICommand
+        public void Execute()
         {
-            public string Name => Commands.ApplyTags;
-            public string Description => "Apply created or edited tags to the image";
-            private readonly MainForm form;
-
-            public ApplyTagsCommand(MainForm form)
-            {
-                this.form = form;
-            }
-
-            public void Execute()
-            {
-                form.ApplyTagsChanges();
-            }
-        }
-
-        public class DeleteTagCommand : ICommand
-        {
-            public string Name => Commands.DeleteTag;
-            public string Description => "Delete the selected tag";
-            private readonly MainForm form;
-
-            public DeleteTagCommand(MainForm form)
-            {
-                this.form = form;
-            }
-
-            public void Execute()
-            {
-                form.DeleteTag();
-            }
-        }
-
-        public class EditSelectedTagCommand : ICommand
-        {
-            public string Name => Commands.EditSelectedTag;
-            public string Description => "Edits the selected tag";
-            private readonly MainForm form;
-
-            public EditSelectedTagCommand(MainForm form)
-            {
-                this.form = form;
-            }
-
-            public void Execute()
-            {
-                if (form.gridViewTags.CurrentCell == null) return;
-                form.gridViewTags.BeginEdit(true);
-            }
+            form.AddNewRow();
         }
     }
 
+    public class ApplyTagsCommand : ICommand
+    {
+        public string Name => Commands.ApplyTags;
+        public string Description => "Apply created or edited tags to the image";
+        private readonly MainForm form;
+
+        public ApplyTagsCommand(MainForm form)
+        {
+            this.form = form;
+        }
+
+        public void Execute()
+        {
+            form.ApplyTagsChanges();
+        }
+    }
+
+    public class DeleteTagCommand : ICommand
+    {
+        public string Name => Commands.DeleteTag;
+        public string Description => "Delete the selected tag";
+        private readonly MainForm form;
+
+        public DeleteTagCommand(MainForm form)
+        {
+            this.form = form;
+        }
+
+        public void Execute()
+        {
+            form.DeleteTag();
+        }
+    }
+
+    public class EditSelectedTagCommand : ICommand
+    {
+        public string Name => Commands.EditSelectedTag;
+        public string Description => "Edits the selected tag";
+        private readonly MainForm form;
+
+        public EditSelectedTagCommand(MainForm form)
+        {
+            this.form = form;
+        }
+
+        public void Execute()
+        {
+            if (form.gridViewTags.CurrentCell == null) return;
+            form.gridViewTags.BeginEdit(true);
+        }
+    }
+
+    public class FocusImageListCommand : ICommand
+    {
+        public string Name => Commands.FocusImageList;
+        public string Description => "Set key focus on image list";
+        private readonly MainForm form;
+
+        public FocusImageListCommand(MainForm form)
+        {
+            this.form = form;
+        }
+
+        public void Execute()
+        {
+            form.gridViewDS.Focus();
+        }
+    }
 }

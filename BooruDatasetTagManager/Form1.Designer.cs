@@ -919,7 +919,7 @@ namespace BooruDatasetTagManager
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripButton BtnTagShow;
         private System.Windows.Forms.ToolStripButton BtnTagSetToAll;
-        private System.Windows.Forms.DataGridView gridViewDS;
+        internal System.Windows.Forms.DataGridView gridViewDS;
         private System.Windows.Forms.ToolStripButton BtnTagMultiModeSwitch;
         private System.Windows.Forms.ToolStripButton BtnTagAddToSelected;
         private System.Windows.Forms.ToolStripButton BtnTagDeleteForSelected;
