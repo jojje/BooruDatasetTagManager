@@ -18,7 +18,7 @@ namespace BooruDatasetTagManager
         [STAThread]
         static void Main()
         {
-            KeyBinder = KeyBinder.Instance;
+            Shortcuts = Shortcuts.Instance;
             Application.EnableVisualStyles();
 #if NET5_0_OR_GREATER
             Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
@@ -84,6 +84,6 @@ namespace BooruDatasetTagManager
 
         public static TagsDB TagsList;
 
-        public static KeyBinder KeyBinder;
+        public static Shortcuts Shortcuts;
     }
 }

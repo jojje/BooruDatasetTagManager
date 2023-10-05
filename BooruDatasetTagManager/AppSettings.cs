@@ -34,7 +34,7 @@ namespace BooruDatasetTagManager
 
         public string Language { get; set; } = "en-US";
 
-        public KeyBindings KeyBindings { get; set; } = new KeyBindings();
+        public Shortcuts KeyBindings { get; set; } = Program.Shortcuts;
 
         public AppSettings(string appDir)
         {
