@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Linq;
 using Newtonsoft.Json;
+using System.Runtime.InteropServices;
 
 namespace BooruDatasetTagManager
 {
@@ -60,19 +61,22 @@ namespace BooruDatasetTagManager
 
     /// <summary>Binds the key-bindings to corresponding actions</summary>
     [Serializable]
-    public class KeyBinder
+    public sealed class KeyBinder
     {
-        private readonly KeyBindings keyBindings;
+        public static readonly KeyBinder Instance = new KeyBinder();
         private readonly Dictionary<Tuple<Keys, Keys>, ICommand> keyCommandMap = new Dictionary<Tuple<Keys, Keys>, ICommand>();
 
-        public KeyBinder(KeyBindings bindings)
+        private KeyBinder()
         {
-            this.keyBindings = bindings;
+            KeyBindings = new KeyBindings();
+            InterceptKeys.AddKeyEventListener(Form_KeyDown);
         }
+
+        public KeyBindings KeyBindings { get; set; }
 
         public void RegisterCommand(ICommand command)
         {
-            if (keyBindings.CommandKeyMap.TryGetValue(command.Name, out Keys compositeKey))
+            if (KeyBindings.CommandKeyMap.TryGetValue(command.Name, out Keys compositeKey))
             {
                 var key = compositeKey & Keys.KeyCode;
                 var modifiers = compositeKey & Keys.Modifiers;
@@ -80,19 +84,13 @@ namespace BooruDatasetTagManager
             }
         }
 
-        public void BindKeyEvents(Form form)
+        public void BindKeyEvents(MainForm mainForm)
         {
-            form.KeyPreview = true;
-            form.KeyDown += Form_KeyDown;
-
-            if (form is MainForm mainForm)
-            {
-                Program.KeyBinder.RegisterCommand(new AddTagCommand(mainForm));
-                Program.KeyBinder.RegisterCommand(new ApplyTagsCommand(mainForm));
-                Program.KeyBinder.RegisterCommand(new DeleteTagCommand(mainForm));
-                Program.KeyBinder.RegisterCommand(new EditSelectedTagCommand(mainForm));
-                Program.KeyBinder.RegisterCommand(new FocusImageListCommand(mainForm));
-            }
+            RegisterCommand(new AddTagCommand(mainForm));
+            RegisterCommand(new ApplyTagsCommand(mainForm));
+            RegisterCommand(new DeleteTagCommand(mainForm));
+            RegisterCommand(new EditSelectedTagCommand(mainForm));
+            RegisterCommand(new FocusImageListCommand(mainForm));
         }
 
         private void Form_KeyDown(object sender, KeyEventArgs e)
@@ -102,6 +100,7 @@ namespace BooruDatasetTagManager
             if (keyCommandMap.TryGetValue(keyTuple, out ICommand command))
             {
                 command.Execute();
+                e.Handled = true;
             }
         }
 
