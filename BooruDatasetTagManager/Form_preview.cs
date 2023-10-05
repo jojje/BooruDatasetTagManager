@@ -15,6 +15,7 @@ namespace BooruDatasetTagManager
         public Form_preview()
         {
             InitializeComponent();
+            Themer.Darkify(this.Controls);
             this.MouseWheel += Form_preview_MouseWheel;
             loaded = false;
         }

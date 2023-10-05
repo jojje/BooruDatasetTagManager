@@ -25,6 +25,7 @@ namespace BooruDatasetTagManager
         public MainForm()
         {
             InitializeComponent();
+            Themer.Darkify(this.Controls);
             tagsBuffer = new List<string>();
             gridViewTags.CellValueChanged += DataGridView1_CellValueChanged;
             gridViewTags.RowsAdded += DataGridView1_RowsAdded;
