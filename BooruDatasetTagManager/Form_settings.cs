@@ -169,16 +169,16 @@ namespace BooruDatasetTagManager
 
         private void renderShortcutsView()
         {
-            // Initialize TableLayoutPanel
+            // initialize layout panel
             var tableLayoutPanel = new TableLayoutPanel();
             tableLayoutPanel.Dock = DockStyle.Fill;
             tableLayoutPanel.Padding = new Padding(0, 20, 0, 0);  // add some vertical top padding to create some "air"
             tableLayoutPanel.ColumnStyles.Clear();
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25f));
 
-            // Add TableLayoutPanel to Form
             tabPageShortcuts.Controls.Add(tableLayoutPanel);
 
+            // dynamically create a list of all the shortcuts, with user configurability for each.
             var it = Program.Settings.KeyBindings.CommandKeyMap.GetEnumerator();
             int row = 0;
             while (it.MoveNext()) {
@@ -190,26 +190,27 @@ namespace BooruDatasetTagManager
                 var toolTip = new System.Windows.Forms.ToolTip();
                 toolTip.SetToolTip(commandNameLabel, commandDesc);
 
-                var keyCodeBox = new System.Windows.Forms.TextBox { Text = KeyCodeConverter.StringEncode(keyCode), Width = 200 };
-                keyCodeBox.KeyDown += (sender, e) =>
+                var keyCodeEdit = new System.Windows.Forms.TextBox { Text = KeyCodeConverter.StringEncode(keyCode), Width = 200 };
+                keyCodeEdit.KeyDown += (sender, e) =>
                 {
-                    Keys newKeyCode = e.KeyCode;
-                    if (!(e.KeyCode == Keys.ControlKey || e.KeyCode == Keys.ControlKey || e.KeyCode == Keys.ControlKey)) {
-                        if (e.Control) newKeyCode |= Keys.Control;
-                        if (e.Alt) newKeyCode |= Keys.Alt;
-                        if (e.Shift) newKeyCode |= Keys.Shift;
-
-                        Program.Settings.KeyBindings.Update(commandName, newKeyCode);
-                        keyCodeBox.Text = KeyCodeConverter.StringEncode(newKeyCode);
-                    }
-
-                    // prevent the key-event from bubbling up
+                    // whisp the event under the rug, as to trigger as few unintended side-effects as possible (in case the app has some other key-listener code).
                     e.Handled = true;
                     e.SuppressKeyPress = true;
+
+                    // Don't allow binding pure meta-keys. Will definitely interfere with other code, plus looks confusing in the settings UI (eg Ctrl+Control !?!)
+                    if (e.KeyCode == Keys.ControlKey || e.KeyCode == Keys.ControlKey || e.KeyCode == Keys.ControlKey) return;
+
+                    Keys newKeyCode = e.KeyCode;
+                    if (e.Control) newKeyCode |= Keys.Control;
+                    if (e.Alt) newKeyCode |= Keys.Alt;
+                    if (e.Shift) newKeyCode |= Keys.Shift;
+
+                    Program.Settings.KeyBindings.Update(commandName, newKeyCode);
+                    keyCodeEdit.Text = KeyCodeConverter.StringEncode(newKeyCode);
                 };
 
                 tableLayoutPanel.Controls.Add(commandNameLabel, 0, row);
-                tableLayoutPanel.Controls.Add(keyCodeBox, 1, row);
+                tableLayoutPanel.Controls.Add(keyCodeEdit, 1, row);
                 row++;
             }
         }

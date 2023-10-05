@@ -18,6 +18,7 @@ namespace BooruDatasetTagManager
         [STAThread]
         static void Main()
         {
+            KeyBinder = KeyBinder.Instance;
             Application.EnableVisualStyles();
 #if NET5_0_OR_GREATER
             Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
@@ -67,13 +68,11 @@ namespace BooruDatasetTagManager
                         TagsList.SaveTags(tagFile);
                     }
                     TagsList.LoadTranslation(TransManager);
-                    KeyBinder = new KeyBinder(Settings.KeyBindings);
                 });
                 f_wait.Close();
             };
             f_wait.ShowDialog();
             #endregion
-
             Application.Run(new MainForm());
         }
 
