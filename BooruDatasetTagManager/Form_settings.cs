@@ -179,12 +179,12 @@ namespace BooruDatasetTagManager
             tabPageShortcuts.Controls.Add(tableLayoutPanel);
 
             // dynamically create a list of all the shortcuts, with user configurability for each.
-            var it = Program.Settings.KeyBindings.CommandKeyMap.GetEnumerator();
+            var it = Program.Shortcuts.KeyBindings.GetEnumerator();
             int row = 0;
             while (it.MoveNext()) {
                 var keyCode = it.Current.Value;
                 var commandName = it.Current.Key;
-                var commandDesc = Program.KeyBinder.FindCommandByName(commandName).Description;
+                var commandDesc = Program.Shortcuts.FindCommandByName(commandName).Description;
 
                 var commandNameLabel = new Label { Text = commandName };
                 var toolTip = new System.Windows.Forms.ToolTip();
@@ -205,7 +205,7 @@ namespace BooruDatasetTagManager
                     if (e.Alt) newKeyCode |= Keys.Alt;
                     if (e.Shift) newKeyCode |= Keys.Shift;
 
-                    Program.Settings.KeyBindings.Update(commandName, newKeyCode);
+                    Program.Settings.KeyBindings.UpdateShortcut(commandName, newKeyCode);
                     keyCodeEdit.Text = KeyCodeConverter.StringEncode(newKeyCode);
                 };
 

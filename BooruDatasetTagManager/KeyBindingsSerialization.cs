@@ -78,8 +78,7 @@ namespace BooruDatasetTagManager
     {
         public override void WriteJson(JsonWriter w, object value, JsonSerializer serializer)
         {
-            var keyBindings = (KeyBindings)value;
-            var jsonCompatibleDict = keyBindings.CommandKeyMap.ToDictionary(
+            var jsonCompatibleDict = ((Shortcuts)value).KeyBindings.ToDictionary(
                 entry => entry.Key,
                 entry => StringEncode(entry.Value)
                 );
@@ -93,20 +92,22 @@ namespace BooruDatasetTagManager
                 entry => entry.Key,
                 entry => StringDecode(entry.Value)
             );
-            var keyBindings = new KeyBindings();
-
-            // Use the update method instead of blindly mem-copying the saved key-bindings, to ensure only commands
-            // that *actually exist* in *this version* of the app get loaded. Otherwise new, dropped or changed
-            // commands will not get reflected, and a crash is likely to ensue as a result.
-            foreach (var kv in commandKeyMap.ToArray()) {
-                keyBindings.Update(kv.Key, kv.Value);
-            }
-            return keyBindings;
+            Shortcuts.Instance.KeyBindings = commandKeyMap;
+            return Shortcuts.Instance;
         }
 
         public override bool CanConvert(Type objectType)
         {
-            return (objectType == typeof(KeyBindings));
+            return (objectType == typeof(Shortcuts));
+        }
+    }
+
+    public static class KeyValuePairDecontructionBoiloerplateForStupidCompiler
+    {
+        public static void Deconstruct<TKey, TValue>(this KeyValuePair<TKey, TValue> kvp, out TKey key, out TValue value)
+        {
+            key = kvp.Key;
+            value = kvp.Value;
         }
     }
 }

@@ -34,7 +34,7 @@ namespace BooruDatasetTagManager
             previewPicBox.Name = "previewPicBox";
             allTagsFilter = new Form_filter();
             switchLanguage();
-            Program.KeyBinder.BindKeyEvents(this);  // allows shortcuts to be triggered on this form
+            Program.Shortcuts.Register(this);  // allows shortcuts to be triggered on this form
         }
 
         private void DataGridView1_RowsRemoved(object sender, DataGridViewRowsRemovedEventArgs e)
