@@ -1,3 +1,21 @@
+# Fork with dark theme and keyboard shortcuts
+The features I was missing were:
+1. Keyboard shortcuts, so I could have a workflow that didn't involve me using the mouse.
+2. Dark theme, since staring into a glaring white canvas when looking at images and writing text is pure torture.
+
+![screenshot](https://github.com/jojje/BooruDatasetTagManager/assets/134889/b728ab8a-d0b8-4c1f-8fe6-b5c9c71d13fe)
+![shortcuts](https://github.com/jojje/BooruDatasetTagManager/assets/134889/95f552c9-869b-432b-82c6-6e5bfdaf9e4e)
+
+The [shortcut](https://github.com/jojje/BooruDatasetTagManager/tree/feat/keyboard-shortcuts) functionality and [dark theme](https://github.com/jojje/BooruDatasetTagManager/tree/feat/dark-theme) are available as separate feature branches if someone wants to pull just one or the other.
+
+Note on the shortcuts:
+* The key bindings are configurable, either in the settings.json file the app uses or in the settings page itself. For the latter, just click the text box for the command you'd like to re-bind to a new key and press the key-combination to be used.
+
+Notes on the dark theme:
+* I only created a dark theme for the main window, since that's where I spend almost all the time when using this app.
+* Some controls (dropdowns and scrollbars in particular) do not have a dark theme, as can be seen in the screenshot. Two reasons for this; Way to much work to style those widgets, and it would require invasive changes to the upstream code. The goal of these changes was to require minimal change to the upstream code, so as to make the changes easy to maintain in the fork, or easily merged elsewhere.
+
+# [ Original README ]
 # BooruDatasetTagManager
 A simple tag editor for a dataset created for training hypernetworks, embeddings, lora, etc. You can create a dataset from scratch using only images, or you can use a program to edit a dataset created using automatic tagging ([wd14-tagger](https://github.com/toriato/stable-diffusion-webui-wd14-tagger), [stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui), etc.)
 The editor is primarily intended for booru-style tagged data, but you can adapt it for other datasets as well.
@@ -34,9 +52,9 @@ From the "view" menu, select "Translate tags" to display columns with translated
 Translation file example:
 ```bash
 //Translation format: <original>=<translation>
-black hair=÷åðíûå âîëîñû
-*solo=Ñîëî
-1girl=1 äåâóøêà
+black hair=Ã·Ã¥Ã°Ã­Ã»Ã¥ Ã¢Ã®Ã«Ã®Ã±Ã»
+*solo=Ã‘Ã®Ã«Ã®
+1girl=1 Ã¤Ã¥Ã¢Ã³Ã¸ÃªÃ 
 ```
 
 Currently, the manual translation filter can only be used in tag autocompletion (with the option enabled in the settings). But in the future, it can be used somewhere else.
@@ -55,11 +73,11 @@ After pressing the "Interrupt" button, in the console you will see the loss stat
 Copy all text to file. File should look like this:
 ```bash
 Loss statistics for file C:\NAI\stable-diffusion-webui\train\NishinoOut2\00006-0-00003-0-98028336_p0.png
-loss:0.045±(0.002)
-recent 32 loss:0.055±(0.007)
+loss:0.045Â±(0.002)
+recent 32 loss:0.055Â±(0.007)
 Loss statistics for file C:\NAI\stable-diffusion-webui\train\NishinoOut2\00014-0-00007-0-98909113_p0.png
-loss:0.045±(0.002)
-recent 32 loss:0.048±(0.007)
+loss:0.045Â±(0.002)
+recent 32 loss:0.048Â±(0.007)
 ...
 ```
 
